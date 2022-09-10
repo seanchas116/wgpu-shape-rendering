@@ -1,4 +1,6 @@
+mod mesh;
 mod renderer;
+mod util;
 
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_console_logger::DEFAULT_LOGGER;
