@@ -13,11 +13,12 @@ function App() {
       canvas.style.width = "500px";
       canvas.style.height = "500px";
       containerRef.current.append(canvas);
-      const renderer = new Renderer(canvas);
-      rendererRef.current = renderer;
+      Renderer.new(canvas).then((renderer) => {
+        // TODO: cleanup renderer
+        rendererRef.current = renderer;
+      });
 
       return () => {
-        renderer.free();
         canvas.remove();
       };
     }

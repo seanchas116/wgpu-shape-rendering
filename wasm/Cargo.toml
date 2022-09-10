@@ -12,6 +12,8 @@ js-sys = "0.3.58"
 log = "0.4.17"
 wasm-bindgen = "0.2.81"
 wasm-bindgen-console-logger = "0.1.1"
+wasm-bindgen-futures = "0.4.32"
+wgpu = {version = "0.13.1", features = ["webgl"]}
 
 [dependencies.web-sys]
 features = [
