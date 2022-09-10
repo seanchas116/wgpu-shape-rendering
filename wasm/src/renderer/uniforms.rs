@@ -5,6 +5,7 @@ use wgpu::util::DeviceExt;
 #[repr(C)]
 #[derive(Copy, Clone, Debug)]
 pub struct UniformsValue {
+    pub view_proj: cgmath::Matrix4<f32>,
     pub color: cgmath::Vector4<f32>,
 }
 

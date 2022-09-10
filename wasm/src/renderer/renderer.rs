@@ -69,6 +69,13 @@ impl Renderer {
         let uniforms = Uniforms::new(
             &device,
             UniformsValue {
+                view_proj: [
+                    [2.0 / width as f32, 0.0, 0.0, 0.0],
+                    [0.0, -2.0 / height as f32, 0.0, 0.0],
+                    [0.0, 0.0, 1.0, 0.0],
+                    [-1.0, 1.0, 0.0, 1.0],
+                ]
+                .into(),
                 color: cgmath::vec4(1.0, 0.0, 0.0, 1.0),
             },
         );
@@ -103,7 +110,7 @@ impl Renderer {
             primitive: wgpu::PrimitiveState {
                 topology: wgpu::PrimitiveTopology::TriangleList,
                 strip_index_format: None,
-                front_face: wgpu::FrontFace::Cw,
+                front_face: wgpu::FrontFace::Ccw,
                 cull_mode: Some(wgpu::Face::Back),
                 // Setting this to anything other than Fill requires Features::POLYGON_MODE_LINE
                 // or Features::POLYGON_MODE_POINT
