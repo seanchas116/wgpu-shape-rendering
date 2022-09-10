@@ -5,8 +5,6 @@ use std::f64::consts::PI;
 
 use cgmath::{point2, Point2};
 
-use super::path::Segment;
-
 const curve_distance_epsilon: f64 = 1e-30;
 const curve_collinearity_epsilon: f64 = 1e-30;
 const curve_angle_tolerance_epsilon: f64 = 0.01;
@@ -18,15 +16,7 @@ fn calc_sq_distance(x1: f64, y1: f64, x2: f64, y2: f64) -> f64 {
     return dx * dx + dy * dy;
 }
 
-pub struct Subdivision {
-    x1: f64,
-    y1: f64,
-    x2: f64,
-    y2: f64,
-    x3: f64,
-    y3: f64,
-    x4: f64,
-    y4: f64,
+struct SubdivisionCubic {
     approximation_scale: f64,
     distance_tolerance_square: f64,
     angle_tolerance: f64,
@@ -34,44 +24,7 @@ pub struct Subdivision {
     points: Vec<Point2<f64>>,
 }
 
-impl Subdivision {
-    pub fn new(cubic: &Segment) {
-        let (x1, y1, x2, y2, x3, y3, x4, y4) = match cubic {
-            Segment::Cubic(p1, p2, p3, p4) => (
-                p1.x as f64,
-                p1.y as f64,
-                p2.x as f64,
-                p2.y as f64,
-                p3.x as f64,
-                p3.y as f64,
-                p4.x as f64,
-                p4.y as f64,
-            ),
-            _ => panic!("Subdivision::new() called with non-cubic segment"),
-        };
-
-        let approximation_scale = 1.0;
-
-        let mut distance_tolerance_square = 0.5 / approximation_scale;
-        distance_tolerance_square *= distance_tolerance_square;
-
-        Subdivision {
-            x1,
-            y1,
-            x2,
-            y2,
-            x3,
-            y3,
-            x4,
-            y4,
-            approximation_scale,
-            distance_tolerance_square,
-            angle_tolerance: 0.0,
-            cusp_limit: 0.0,
-            points: Vec::new(),
-        };
-    }
-
+impl SubdivisionCubic {
     fn recursive_bezier(
         &mut self,
         x1: f64,
@@ -279,4 +232,30 @@ impl Subdivision {
         self.recursive_bezier(x1, y1, x12, y12, x123, y123, x1234, y1234, level + 1);
         self.recursive_bezier(x1234, y1234, x234, y234, x34, y34, x4, y4, level + 1);
     }
+}
+
+pub fn subdivideCubic(
+    p1: Point2<f64>,
+    p2: Point2<f64>,
+    p3: Point2<f64>,
+    p4: Point2<f64>,
+) -> Vec<Point2<f64>> {
+    let approximation_scale = 1.0;
+
+    let mut distance_tolerance_square = 0.5 / approximation_scale;
+    distance_tolerance_square *= distance_tolerance_square;
+
+    let mut subdivision = SubdivisionCubic {
+        approximation_scale,
+        distance_tolerance_square,
+        angle_tolerance: 0.0,
+        cusp_limit: 0.0,
+        points: Vec::new(),
+    };
+
+    subdivision.points.push(p1);
+    subdivision.recursive_bezier(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, 0);
+    subdivision.points.push(p4);
+
+    subdivision.points
 }

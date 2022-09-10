@@ -11,19 +11,19 @@ impl Path {
         }
     }
 
-    pub fn move_to(&mut self, point: Point2<f32>) {
+    pub fn move_to(&mut self, point: Point2<f64>) {
         self.commands.push(PathCommand::MoveTo(point));
     }
 
-    pub fn line_to(&mut self, point: Point2<f32>) {
+    pub fn line_to(&mut self, point: Point2<f64>) {
         self.commands.push(PathCommand::LineTo(point));
     }
 
-    pub fn quad_to(&mut self, control: Point2<f32>, point: Point2<f32>) {
+    pub fn quad_to(&mut self, control: Point2<f64>, point: Point2<f64>) {
         self.commands.push(PathCommand::QuadTo(control, point));
     }
 
-    pub fn cubic_to(&mut self, control1: Point2<f32>, control2: Point2<f32>, point: Point2<f32>) {
+    pub fn cubic_to(&mut self, control1: Point2<f64>, control2: Point2<f64>, point: Point2<f64>) {
         self.commands
             .push(PathCommand::CubicTo(control1, control2, point));
     }
@@ -69,15 +69,15 @@ impl Path {
 }
 
 pub enum PathCommand {
-    MoveTo(Point2<f32>),
-    LineTo(Point2<f32>),
-    QuadTo(Point2<f32>, Point2<f32>),
-    CubicTo(Point2<f32>, Point2<f32>, Point2<f32>),
+    MoveTo(Point2<f64>),
+    LineTo(Point2<f64>),
+    QuadTo(Point2<f64>, Point2<f64>),
+    CubicTo(Point2<f64>, Point2<f64>, Point2<f64>),
     Close,
 }
 
 pub enum Segment {
-    Line(Point2<f32>, Point2<f32>),
-    Quad(Point2<f32>, Point2<f32>, Point2<f32>),
-    Cubic(Point2<f32>, Point2<f32>, Point2<f32>, Point2<f32>),
+    Line(Point2<f64>, Point2<f64>),
+    Quad(Point2<f64>, Point2<f64>, Point2<f64>),
+    Cubic(Point2<f64>, Point2<f64>, Point2<f64>, Point2<f64>),
 }
