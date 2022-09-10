@@ -41,22 +41,22 @@ impl Path {
         let mut start = point2(0.0, 0.0);
         let mut segments = Vec::new();
 
-        for command in self.commands {
+        for command in &self.commands {
             match command {
                 PathCommand::MoveTo(point) => {
-                    start = point;
+                    start = *point;
                 }
                 PathCommand::LineTo(point) => {
-                    segments.push(Segment::Line(start, point));
-                    start = point;
+                    segments.push(Segment::Line(start, *point));
+                    start = *point;
                 }
                 PathCommand::QuadTo(control, point) => {
-                    segments.push(Segment::Quad(start, control, point));
-                    start = point;
+                    segments.push(Segment::Quad(start, *control, *point));
+                    start = *point;
                 }
                 PathCommand::CubicTo(control1, control2, point) => {
-                    segments.push(Segment::Cubic(start, control1, control2, point));
-                    start = point;
+                    segments.push(Segment::Cubic(start, *control1, *control2, *point));
+                    start = *point;
                 }
                 PathCommand::Close => {
                     // TODO
