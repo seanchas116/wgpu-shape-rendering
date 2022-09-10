@@ -1,5 +1,6 @@
 use crate::util::cast_to_u8_slice;
 use cgmath::{Point2, Point3};
+use lyon::lyon_tessellation::VertexBuffers;
 use wgpu::util::DeviceExt;
 
 #[repr(C)]
@@ -32,6 +33,10 @@ impl Mesh {
             index_buffer,
             num_indices: indices.len() as u32,
         }
+    }
+
+    pub fn from_tessellation(device: &wgpu::Device, geometry: &VertexBuffers<Vertex, u16>) -> Mesh {
+        Mesh::new(device, &geometry.vertices, &geometry.indices)
     }
 
     pub fn pentagon(device: &wgpu::Device) -> Mesh {

@@ -5,7 +5,7 @@ use lyon::tessellation::*;
 
 use crate::renderer::mesh::Vertex;
 
-pub fn exampleTessellation() -> VertexBuffers<Vertex, u16> {
+pub fn example_tessellation() -> VertexBuffers<Vertex, u16> {
     // Build a Path.
     let mut builder = Path::builder();
     builder.begin(point(0.0, 0.0));
