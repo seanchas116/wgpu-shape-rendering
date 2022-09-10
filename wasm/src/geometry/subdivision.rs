@@ -236,7 +236,7 @@ impl SubdivisionCubic {
     }
 }
 
-fn subdivideCubic(
+pub fn subdivideCubic(
     p1: Point2<f64>,
     p2: Point2<f64>,
     p3: Point2<f64>,
@@ -261,17 +261,11 @@ fn subdivideCubic(
     subdivision.points
 }
 
-pub fn subdivide(segment: &Segment) -> Vec<Point2<f64>> {
-    match &segment {
-        Segment::Line(p1, p2) => {
-            vec![*p2]
-        }
-        Segment::Quad(p1, c1, p2) => subdivideCubic(
-            *p1,
-            p1 + (c1 - p1) * (2.0 / 3.0),
-            p2 + (c1 - p2) * (2.0 / 3.0),
-            *p2,
-        ),
-        Segment::Cubic(p1, c1, c2, p2) => subdivideCubic(*p1, *c1, *c2, *p2),
-    }
+pub fn subdivideQuad(p1: Point2<f64>, p2: Point2<f64>, p3: Point2<f64>) -> Vec<Point2<f64>> {
+    subdivideCubic(
+        p1,
+        p1 + (p2 - p1) * (2.0 / 3.0),
+        p3 + (p2 - p3) * (2.0 / 3.0),
+        p3,
+    )
 }

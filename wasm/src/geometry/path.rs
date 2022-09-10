@@ -1,6 +1,9 @@
 use cgmath::{point2, Point2};
 
-use super::segment::Segment;
+use super::{
+    segment::Segment,
+    subdivision::{subdivideCubic, subdivideQuad},
+};
 
 pub struct Path {
     commands: Vec<PathCommand>,
@@ -84,15 +87,11 @@ impl Path {
                     start = *point;
                 }
                 PathCommand::QuadTo(control, point) => {
-                    points.extend(super::subdivision::subdivide(&Segment::Quad(
-                        start, *control, *point,
-                    )));
+                    points.extend(subdivideQuad(start, *control, *point));
                     start = *point;
                 }
                 PathCommand::CubicTo(control1, control2, point) => {
-                    points.extend(super::subdivision::subdivide(&Segment::Cubic(
-                        start, *control1, *control2, *point,
-                    )));
+                    points.extend(subdivideCubic(start, *control1, *control2, *point));
                     start = *point;
                 }
                 PathCommand::Close => {
