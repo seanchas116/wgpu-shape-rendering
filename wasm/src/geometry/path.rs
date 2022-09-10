@@ -70,10 +70,37 @@ impl Path {
     }
 
     pub fn subdivide(&self) -> Vec<Point2<f64>> {
+        let mut start = point2(0.0, 0.0);
         let mut points = Vec::new();
-        for segment in self.to_segments() {
-            points.extend(super::subdivision::subdivide(&segment));
+
+        for command in &self.commands {
+            match command {
+                PathCommand::MoveTo(point) => {
+                    start = *point;
+                    points.push(*point);
+                }
+                PathCommand::LineTo(point) => {
+                    points.push(*point);
+                    start = *point;
+                }
+                PathCommand::QuadTo(control, point) => {
+                    points.extend(super::subdivision::subdivide(&Segment::Quad(
+                        start, *control, *point,
+                    )));
+                    start = *point;
+                }
+                PathCommand::CubicTo(control1, control2, point) => {
+                    points.extend(super::subdivision::subdivide(&Segment::Cubic(
+                        start, *control1, *control2, *point,
+                    )));
+                    start = *point;
+                }
+                PathCommand::Close => {
+                    // TODO
+                }
+            }
         }
+
         points
     }
 }
