@@ -16,6 +16,8 @@ wasm-bindgen-futures = "0.4.32"
 wgpu = {version = "0.13.1", features = ["webgl"]}
 cgmath = "0.18.0"
 lyon = "1.0.0"
+rustybuzz = "0.5.1"
+ttf-parser = "0.15.2"
 
 [dependencies.web-sys]
 features = [

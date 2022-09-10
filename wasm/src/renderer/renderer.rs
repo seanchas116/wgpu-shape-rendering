@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::renderer::{example_mesh::example_tessellation, mesh::Mesh, uniforms::UniformsValue};
+use crate::renderer::{example_mesh::example_text, mesh::Mesh, uniforms::UniformsValue};
 
 use super::uniforms::Uniforms;
 use log::info;
@@ -131,7 +131,10 @@ impl Renderer {
             multiview: None,
         });
 
-        let mesh = Mesh::from_tessellation(&device, &example_tessellation());
+        let mesh = Mesh::from_tessellation(
+            &device,
+            &example_text("Hello, world!", 32.0, 48.0, 50.0, 50.0, 1000.0),
+        );
 
         Self {
             width,
