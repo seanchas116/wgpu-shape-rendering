@@ -1,6 +1,6 @@
 use std::iter;
 
-use crate::renderer::{mesh::Mesh, uniforms::UniformsValue};
+use crate::renderer::{example_mesh::exampleTessellation, mesh::Mesh, uniforms::UniformsValue};
 
 use super::uniforms::Uniforms;
 use log::info;
@@ -103,7 +103,7 @@ impl Renderer {
             primitive: wgpu::PrimitiveState {
                 topology: wgpu::PrimitiveTopology::TriangleList,
                 strip_index_format: None,
-                front_face: wgpu::FrontFace::Ccw,
+                front_face: wgpu::FrontFace::Cw,
                 cull_mode: Some(wgpu::Face::Back),
                 // Setting this to anything other than Fill requires Features::POLYGON_MODE_LINE
                 // or Features::POLYGON_MODE_POINT
@@ -124,7 +124,9 @@ impl Renderer {
             multiview: None,
         });
 
-        let mesh = Mesh::pentagon(&device);
+        let tessellation = exampleTessellation();
+        info!("tessellation: {:?}", tessellation);
+        let mesh = Mesh::new(&device, &tessellation.vertices, &tessellation.indices);
 
         Self {
             width,
