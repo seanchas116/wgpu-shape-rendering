@@ -3,7 +3,10 @@ use std::iter;
 use log::info;
 use wasm_bindgen::prelude::*;
 
-use crate::mesh::Mesh;
+use crate::{
+    mesh::Mesh,
+    uniforms::{Uniforms, UniformsValue},
+};
 
 #[wasm_bindgen]
 pub struct Renderer {
@@ -15,6 +18,7 @@ pub struct Renderer {
     config: wgpu::SurfaceConfiguration,
     pipeline: wgpu::RenderPipeline,
     mesh: Mesh,
+    uniforms: Uniforms,
 }
 
 #[wasm_bindgen]
@@ -64,10 +68,17 @@ impl Renderer {
             source: wgpu::ShaderSource::Wgsl(include_str!("shader.wgsl").into()),
         });
 
+        let uniforms = Uniforms::new(
+            &device,
+            UniformsValue {
+                color: cgmath::vec4(1.0, 0.0, 0.0, 1.0),
+            },
+        );
+
         let render_pipeline_layout =
             device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
                 label: Some("Render Pipeline Layout"),
-                bind_group_layouts: &[],
+                bind_group_layouts: &[&uniforms.bind_group_layout],
                 push_constant_ranges: &[],
             });
 
@@ -126,6 +137,7 @@ impl Renderer {
             config,
             pipeline,
             mesh,
+            uniforms,
         }
     }
 
@@ -162,6 +174,7 @@ impl Renderer {
             });
 
             render_pass.set_pipeline(&self.pipeline);
+            render_pass.set_bind_group(0, &self.uniforms.bind_group, &[]);
             render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
             render_pass
                 .set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);

@@ -1,5 +1,6 @@
 mod mesh;
 mod renderer;
+mod uniforms;
 mod util;
 
 use wasm_bindgen::prelude::*;
