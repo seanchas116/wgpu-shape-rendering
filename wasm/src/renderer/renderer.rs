@@ -133,7 +133,7 @@ impl Renderer {
 
         let mesh = Mesh::from_tessellation(
             &device,
-            &example_text("Hello, world!", 32.0, 48.0, 50.0, 50.0, 1000.0),
+            &example_text("Hello, world!", 32.0, 48.0, 50.0, 50.0),
         );
 
         Self {

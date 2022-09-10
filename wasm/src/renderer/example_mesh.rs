@@ -41,7 +41,6 @@ pub fn example_text(
     line_height: f32,
     x: f32,
     y: f32,
-    width: f32,
 ) -> VertexBuffers<Vertex, u16> {
     let font_data = include_bytes!("NotoSerifJP-Regular.otf");
     let font_face = ttf_parser::Face::from_slice(font_data, 0).unwrap();
