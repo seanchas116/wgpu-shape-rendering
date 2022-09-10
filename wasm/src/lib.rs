@@ -1,3 +1,4 @@
+mod geometry;
 mod renderer;
 mod util;
 
