@@ -1,5 +1,7 @@
 use cgmath::{point2, Point2};
 
+use super::segment::Segment;
+
 pub struct Path {
     commands: Vec<PathCommand>,
 }
@@ -66,6 +68,14 @@ impl Path {
 
         return segments;
     }
+
+    pub fn subdivide(&self) -> Vec<Point2<f64>> {
+        let mut points = Vec::new();
+        for segment in self.to_segments() {
+            points.extend(super::subdivision::subdivide(&segment));
+        }
+        points
+    }
 }
 
 pub enum PathCommand {
@@ -74,10 +84,4 @@ pub enum PathCommand {
     QuadTo(Point2<f64>, Point2<f64>),
     CubicTo(Point2<f64>, Point2<f64>, Point2<f64>),
     Close,
-}
-
-pub enum Segment {
-    Line(Point2<f64>, Point2<f64>),
-    Quad(Point2<f64>, Point2<f64>, Point2<f64>),
-    Cubic(Point2<f64>, Point2<f64>, Point2<f64>, Point2<f64>),
 }

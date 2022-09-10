@@ -5,7 +5,7 @@ use std::f64::consts::PI;
 
 use cgmath::{point2, Point2};
 
-use super::path::Segment;
+use super::segment::Segment;
 
 const curve_distance_epsilon: f64 = 1e-30;
 const curve_collinearity_epsilon: f64 = 1e-30;
