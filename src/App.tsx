@@ -16,6 +16,7 @@ function App() {
       Renderer.new(canvas).then((renderer) => {
         // TODO: cleanup renderer
         rendererRef.current = renderer;
+        renderer.render();
       });
 
       return () => {
