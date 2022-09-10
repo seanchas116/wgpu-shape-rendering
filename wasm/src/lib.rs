@@ -1,3 +1,5 @@
+mod renderer;
+
 use log::info;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_console_logger::DEFAULT_LOGGER;
