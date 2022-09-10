@@ -5,6 +5,8 @@ use std::f64::consts::PI;
 
 use cgmath::{point2, Point2};
 
+use super::path::Segment;
+
 const curve_distance_epsilon: f64 = 1e-30;
 const curve_collinearity_epsilon: f64 = 1e-30;
 const curve_angle_tolerance_epsilon: f64 = 0.01;
@@ -234,7 +236,7 @@ impl SubdivisionCubic {
     }
 }
 
-pub fn subdivideCubic(
+fn subdivideCubic(
     p1: Point2<f64>,
     p2: Point2<f64>,
     p3: Point2<f64>,
@@ -253,9 +255,23 @@ pub fn subdivideCubic(
         points: Vec::new(),
     };
 
-    subdivision.points.push(p1);
     subdivision.recursive_bezier(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, p4.x, p4.y, 0);
     subdivision.points.push(p4);
 
     subdivision.points
+}
+
+pub fn subdivide(segment: &Segment) -> Vec<Point2<f64>> {
+    match &segment {
+        Segment::Line(p1, p2) => {
+            vec![*p2]
+        }
+        Segment::Quad(p1, c1, p2) => subdivideCubic(
+            *p1,
+            p1 + (c1 - p1) * (2.0 / 3.0),
+            p2 + (c1 - p2) * (2.0 / 3.0),
+            *p2,
+        ),
+        Segment::Cubic(p1, c1, c2, p2) => subdivideCubic(*p1, *c1, *c2, *p2),
+    }
 }
