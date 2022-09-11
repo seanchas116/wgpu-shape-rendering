@@ -15,9 +15,12 @@ pub struct Renderer {
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
     pipeline: wgpu::RenderPipeline,
+    multisampled_framebuffer: wgpu::TextureView,
     mesh: Mesh,
     uniforms: Uniforms,
 }
+
+const sample_count: u32 = 4;
 
 #[wasm_bindgen]
 impl Renderer {
@@ -122,9 +125,8 @@ impl Renderer {
             },
             depth_stencil: None,
             multisample: wgpu::MultisampleState {
-                count: 1,
-                mask: !0,
-                alpha_to_coverage_enabled: false,
+                count: sample_count,
+                ..Default::default()
             },
             // If the pipeline will be used with a multiview render pass, this
             // indicates how many array layers the attachments will have.
@@ -136,6 +138,25 @@ impl Renderer {
             &example_text("Hello, world!", 32.0, 48.0, 50.0, 50.0),
         );
 
+        let multisampled_texture_extent = wgpu::Extent3d {
+            width,
+            height,
+            depth_or_array_layers: 1,
+        };
+        let multisampled_frame_descriptor = &wgpu::TextureDescriptor {
+            size: multisampled_texture_extent,
+            mip_level_count: 1,
+            sample_count,
+            dimension: wgpu::TextureDimension::D2,
+            format: config.format,
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            label: None,
+        };
+
+        let multisampled_framebuffer = device
+            .create_texture(multisampled_frame_descriptor)
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
         Self {
             width,
             height,
@@ -144,6 +165,7 @@ impl Renderer {
             queue,
             config,
             pipeline,
+            multisampled_framebuffer,
             mesh,
             uniforms,
         }
@@ -166,8 +188,8 @@ impl Renderer {
             let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("Render Pass"),
                 color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
+                    view: &self.multisampled_framebuffer,
+                    resolve_target: Some(&view),
                     ops: wgpu::Operations {
                         load: wgpu::LoadOp::Clear(wgpu::Color {
                             r: 1.0,
