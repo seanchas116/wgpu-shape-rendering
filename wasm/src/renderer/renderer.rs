@@ -135,7 +135,7 @@ impl Renderer {
 
         let mesh = Mesh::from_tessellation(
             &device,
-            &example_text("Hello, world!", 32.0, 48.0, 50.0, 50.0),
+            &example_text("Hello, world!", 64.0, 48.0, 32.0, 96.0),
         );
 
         let multisampled_texture_extent = wgpu::Extent3d {
