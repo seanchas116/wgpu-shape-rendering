@@ -10,8 +10,8 @@ function App() {
       const canvas = document.createElement("canvas");
       canvas.width = 1000;
       canvas.height = 1000;
-      canvas.style.width = "1000px";
-      canvas.style.height = "1000px";
+      canvas.style.width = "500px";
+      canvas.style.height = "500px";
       canvas.style.imageRendering = "pixelated";
       containerRef.current.append(canvas);
       Renderer.new(canvas).then((renderer) => {
