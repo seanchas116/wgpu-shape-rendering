@@ -79,7 +79,13 @@ impl Renderer {
                     [-1.0, 1.0, 0.0, 1.0],
                 ]
                 .into(),
-                color: cgmath::vec4(0.5, 0.0, 0.0, 1.0),
+                // tailwind blue-900
+                color: cgmath::vec4(
+                    0x1e as f32 / 0xff as f32,
+                    0x3a as f32 / 0xff as f32,
+                    0x8a as f32 / 0xff as f32,
+                    1.0,
+                ),
             },
         );
 
